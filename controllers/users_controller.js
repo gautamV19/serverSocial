@@ -11,7 +11,15 @@ module.exports.createUser = async function (req, res) {
 
     if (!user) {
       await User.create(req.body);
-      return res.redirect("/users/sign-in");
+      return res.status(500).json({
+        message: "Sign up successfull, user created",
+        success: true,
+        data: {
+          token: "",
+          user: {}
+        }
+
+      });
     } else {
       return res.redirect("back");
     }
