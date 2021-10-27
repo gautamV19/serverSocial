@@ -1,16 +1,19 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs")
 
 module.exports.createUser = async function (req, res) {
   if (req.body.password != req.body.confirm_password) {
     return res.redirect("back");
   }
+  const { name, email, friendship } = req.body;
+  const password = await bcrypt.hash(req.body.password, 12);
 
   try {
-    let user = await User.findOne({ email: req.body.email });
+    let user = await User.findOne({ email: email });
 
     if (!user) {
-      await User.create(req.body);
+      await User.create({ name, email, friendship, password });
       return res.status(500).json({
         message: "Sign up successfull, user created",
         success: true,
