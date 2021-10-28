@@ -58,7 +58,7 @@ module.exports.createSession = async function (req, res) {
         });
       }
       else {
-        return res.json(422, {
+        return res.status(400).json({
           message: "Invalid username or password",
           data: {
             data: req.body,
@@ -67,7 +67,7 @@ module.exports.createSession = async function (req, res) {
         });
       }
     } else {
-      return res.json(422, {
+      return res.status(422).json({
         message: "Invalid username or password",
         data: {
           data: req.body,
