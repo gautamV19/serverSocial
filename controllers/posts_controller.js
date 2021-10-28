@@ -1,8 +1,10 @@
 const POST = require('../models/post');
+const Comment = require("../models/comment");
+const Like = require("../models/like");
 
 module.exports.create = async function (req, res) {
     try {
-        console.log(req.header("Authorization"));
+        console.log("token: ", req.header("Authorization"));
         const post = await POST.create({
             content: req.body.content,
         })

@@ -6,8 +6,6 @@ const app = express();
 
 app.use(express.urlencoded());
 
-
-
 app.use("/", require('./routes'));
 
 require('./config/mongoConnection');
