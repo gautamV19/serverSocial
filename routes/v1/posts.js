@@ -1,13 +1,12 @@
 const express = require("express");
+
 const passport = require("passport");
-
-
-const isAuth = require("../../config/authinticate");
+require("../../config/passports")(passport);
 
 const router = express.Router();
 
 const postsController = require("../../controllers/posts_controller");
 
-router.post('/create', isAuth, postsController.create);
+router.post('/create', postsController.create);
 
 module.exports = router;
