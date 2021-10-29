@@ -1,5 +1,6 @@
 const COMMENT = require("../models/comment");
 const POST = require("../models/post")
+const Likes = require("../models/like")
 
 module.exports.create = async function (req, res) {
     try {
@@ -40,6 +41,8 @@ module.exports.destroy = async function (req, res) {
 
     try {
         const commentId = req.query.comment_id;
+        await Like.deleteMany({ onModel: "Comment", likeable: req.params.id });
+
         // console.log("commentId: ", commentId, "user ", req.user);
 
         let comment = await COMMENT.findById(commentId);
