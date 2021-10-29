@@ -11,5 +11,6 @@ const router = express.Router();
 const likesController = require("../../controllers/likes_controller");
 
 router.post('/toggle', passport.authenticate('jwt', { session: false }), likesController.toggle);
+router.get('/', passport.authenticate('jwt', { session: false }), likesController.list);
 
 module.exports = router;
