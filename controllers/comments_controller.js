@@ -54,14 +54,21 @@ module.exports.destroy = async function (req, res) {
                 },
             });
 
-            comment.remove();
+            await comment.remove();
+
+            return res.status(200).json({
+                message: "Comment deleted successfully", success: true
+            })
         }
-
-
-        return res.status(200).json({
-            "message": "Comment deleted successfully", "success": true
-        })
+        else {
+            return res.status(400).json({
+                message: "Unauthorized"
+            })
+        }
     } catch (err) {
         console.log("Error in removing comment from post", err);
+        return res.json(500, {
+            message: "Internal server error",
+        });
     }
 }
