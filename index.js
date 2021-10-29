@@ -16,4 +16,4 @@ require('./config/mongoConnection');
 
 const port = process.env.PORT || 7002;
 
-app.listen(port, () => { console.log('Listening on port 7000') });
+app.listen(port, () => { console.log('Listening on port', port) });
