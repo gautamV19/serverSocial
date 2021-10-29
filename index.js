@@ -4,13 +4,13 @@ const express = require('express');
 const passport = require('passport');
 
 const app = express();
+app.use(passport.initialize());
 
 app.use(express.urlencoded());
 app.use(express.json());
 
 app.use("/", require('./routes'));
 
-app.use(passport.initialize());
 
 require('./config/mongoConnection');
 

@@ -14,15 +14,29 @@ module.exports = function (passport) {
     passport.use(
         new JwtStrategy(opts, async function (jwtPayload, done) {
             console.log("User", jwtPayload);
+
+            // User.findOne({ email: jwtPayload.email }, function (err, user) {
+            //     if (err) {
+            //         console.log("Error in finding user from JWT", err);
+            //         return;
+            //     }
+            //     if (user) {
+            //         return done(null, user);
+            //     } else {
+            //         return done(null, false);
+            //     }
+            // })
+
             // done();
             // return done(null, jwtPayload);
-            await User.findById(jwtPayload._id, function (err, user) {
+            User.findById(jwtPayload._id, function (err, user) {
                 if (err) {
                     console.log("Error in finding user from JWT", err);
-                    return;
+                    return done(err, false);
                 }
 
                 if (user) {
+                    // console.log(user);
                     return done(null, user);
                 } else {
                     return done(null, false);
