@@ -6,17 +6,18 @@ module.exports.addFriend = async function (req, res) {
     try {
         const toUser = await User.findById(req.query.user_id);
         const fromUser = req.user;
+        // console.log("fromUser: " + fromUser, "toUser: " + toUser);
 
         const newFriendship = await Friendship.create({
             from_user: fromUser,
             to_user: toUser,
         })
 
-        fromUser.friendship.push(newFriendship);
-        fromUser.save();
+        await fromUser.friendship.push(newFriendship);
+        await fromUser.save();
 
         return res.status(200).json({
-            "message": "Now you're friends with Aakash",
+            "message": `Now you're friends with ${toUser.name}`,
             "success": true,
             data: { "friendship": newFriendship }
         })
@@ -26,4 +27,16 @@ module.exports.addFriend = async function (req, res) {
             message: "Internal server error",
         });
     }
+}
+
+module.exports.fetch_user_friends = async function (req, res) {
+    // const friendship = User.findById(req.user._id).populate("friendship");
+    const allFriends = await Friendship.find({ from_user: req.user });
+
+    return res.status(200).json({
+        "message": "List of friends for user id 5e33fc7c9cd14572518c16fa",
+        "success": true,
+        data: { "friends": allFriends },
+    })
+
 }

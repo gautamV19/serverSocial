@@ -8,7 +8,9 @@ const router = express.Router();
 
 const friendshipController = require("../../controllers/friendship_controller");
 
-router.post("/creat_friendship", passport.authenticate("jwt", { session: false }), friendshipController.addFriend);
+router.post("/create_friendship", passport.authenticate("jwt", { session: false }), friendshipController.addFriend);
+router.get("/fetch_user_friends", passport.authenticate("jwt", { session: false }), friendshipController.fetch_user_friends)
+
 
 
 module.exports = router;
