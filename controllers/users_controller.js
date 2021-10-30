@@ -82,3 +82,26 @@ module.exports.createSession = async function (req, res) {
     });
   }
 };
+
+module.exports.getUser = async function (req, res) {
+
+  try {
+    const id = req.params.id;
+    // console.log("Finding user", id);
+    const user = await User.findById(id);
+    // console.log("Finding user", user);
+
+    return res.status(200).json({
+      "success": true,
+      "data": {
+        "user": user
+      }
+    });
+  } catch (err) {
+    console.log("******Error in getUser", err);
+    return res.json(500, {
+      message: "Internal server error",
+    });
+  }
+
+}

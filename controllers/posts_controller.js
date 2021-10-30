@@ -26,7 +26,7 @@ module.exports.showPosts = async function (req, res) {
         const page = req.query.page;
         const limit = req.query.limit;
 
-        let posts = await POST.find({});
+        let posts = await POST.find({}).populate("user");
 
         let len = posts.length;
 

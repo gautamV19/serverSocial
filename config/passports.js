@@ -9,7 +9,6 @@ let opts = {
 }
 
 module.exports = function (passport) {
-    console.log("in passport");
 
     passport.use(
         new JwtStrategy(opts, async function (jwtPayload, done) {
