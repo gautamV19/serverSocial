@@ -109,20 +109,19 @@ module.exports.editUser = async function (req, res) {
 
   try {
     const { _id: id, password, confirm_password, name } = req.body;
-    console.log("Update user", { id, password, confirm_password, name });
+    // console.log("Update user", { id, password, confirm_password, name });
 
     if (password != confirm_password) {
       return res.status(403).json({ message: "password not matched" })
     }
     let user = await User.findById(id)
-    console.log("Let's edit the user", user);
+    // console.log("Let's edit the user", user);
     if (user) {
       const isMatched = await bcrypt.compare(req.body.password, user.password);
 
       if (isMatched) {
-        let user = await User.findByIdAndUpdate(id, {
-          name: name
-        })
+        user.name = name;
+        user.save();
 
         return res.status(200).json({
           "message": "User updated!",
