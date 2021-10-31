@@ -7,9 +7,11 @@ const router = express.Router();
 
 const userController = require("../../controllers/users_controller");
 
+router.get("/search", userController.search);
+
 router.get("/:id", passport.authenticate('jwt', { session: false }), userController.getUser);
 router.post("/login", userController.createSession);
 router.post("/signup", userController.createUser);
-router.post("/edit", userController.editUser)
+router.post("/edit", userController.editUser);
 
 module.exports = router;

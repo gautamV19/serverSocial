@@ -144,5 +144,34 @@ module.exports.editUser = async function (req, res) {
       message: "Internal server error",
     });
   }
+}
 
+module.exports.search = async function (req, res) {
+  try {
+    const text = req.query.text;
+
+    const len = text.length;
+
+    console.log("Searching...", text, len);
+
+    let allUsers = await User.find({});
+
+    console.log(allUsers);
+
+    let users = allUsers.filter((user) => user.name.substr(0, len) === text)
+
+    console.log("search", users);
+    return res.status(200).json({
+      "success": true,
+      "data": {
+        "users": users
+      }
+    });
+
+  } catch (err) {
+    console.log("******Error in search user", err);
+    return res.json(500, {
+      message: "Internal server error",
+    });
+  }
 }
