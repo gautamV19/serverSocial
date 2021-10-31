@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
 
 module.exports.createUser = async function (req, res) {
   if (req.body.password != req.body.confirm_password) {
@@ -99,6 +99,48 @@ module.exports.getUser = async function (req, res) {
     });
   } catch (err) {
     console.log("******Error in getUser", err);
+    return res.json(500, {
+      message: "Internal server error",
+    });
+  }
+}
+
+module.exports.editUser = async function (req, res) {
+
+  try {
+    const { _id: id, password, confirm_password, name } = req.body;
+    console.log("Update user", { id, password, confirm_password, name });
+
+    if (password != confirm_password) {
+      return res.status(403).json({ message: "password not matched" })
+    }
+    let user = await User.findById(id)
+    console.log("Let's edit the user", user);
+    if (user) {
+      const isMatched = await bcrypt.compare(req.body.password, user.password);
+
+      if (isMatched) {
+        let user = await User.findByIdAndUpdate(id, {
+          name: name
+        })
+
+        return res.status(200).json({
+          "message": "User updated!",
+          "success": true,
+          "data": {
+            user: user,
+            token: jwt.sign(user.toJSON(), process.env.ACCESS_TOKEN_SECRET, {
+              expiresIn: "589200000000000",
+            }),
+          },
+        });
+      }
+      else {
+        res.status(500).json({ message: "unauthorized" });
+      }
+    }
+  } catch (err) {
+    console.log("******Error in edit user", err);
     return res.json(500, {
       message: "Internal server error",
     });
