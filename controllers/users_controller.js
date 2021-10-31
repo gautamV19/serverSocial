@@ -14,7 +14,7 @@ module.exports.createUser = async function (req, res) {
 
     if (!user) {
       let newUser = await User.create({ name, email, friendship, password });
-      return res.status(500).json({
+      return res.status(200).json({
         message: "Sign up successfull, user created",
         success: true,
         data: {
@@ -51,7 +51,7 @@ module.exports.createSession = async function (req, res) {
           success: true,
           data: {
             token: jwt.sign(user.toJSON(), process.env.ACCESS_TOKEN_SECRET, {
-              expiresIn: "1000000",
+              expiresIn: "589200000000000",
             }),
             user: { name, email, id }
           },

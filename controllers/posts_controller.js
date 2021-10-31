@@ -26,7 +26,15 @@ module.exports.showPosts = async function (req, res) {
         const page = req.query.page;
         const limit = req.query.limit;
 
-        let posts = await POST.find({}).populate("user");
+        let posts = await POST.find({})
+            .sort("-createdAt")
+            .populate("user")
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "user",
+                },
+            });
 
         let len = posts.length;
 

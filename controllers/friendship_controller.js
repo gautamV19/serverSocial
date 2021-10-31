@@ -22,7 +22,7 @@ module.exports.addFriend = async function (req, res) {
         user.save();
 
         return res.status(200).json({
-            "message": `Now you're friends with ${toUser.name}`,
+            "message": `Now you're friends with ${hisFriend.name}`,
             "success": true,
             data: { "friendship": newFriendship }
         })
@@ -36,10 +36,10 @@ module.exports.addFriend = async function (req, res) {
 
 module.exports.fetch_user_friends = async function (req, res) {
     // const friendship = User.findById(req.user._id).populate("friendship");
-    const allFriends = await Friendship.find({ from_user: req.user });
+    const allFriends = await Friendship.find({ from_user: req.user }).populate("to_user from_user");
 
     return res.status(200).json({
-        "message": "List of friends for user id 5e33fc7c9cd14572518c16fa",
+        "message": `List of friends for user id ${req.user.name}`,
         "success": true,
         data: { "friends": allFriends },
     })
@@ -51,12 +51,16 @@ module.exports.removeFriend = async function (req, res) {
         const hisId = req.query.user_id;
         const user = await User.findById(hisId);
 
-        const reqFriendship = await Friendship.find({
+        await Friendship.findOneAndDelete({
             from_user: req.user,
             to_user: user,
         });
-        reqFriendship.remove();
-        req.user.friendship.pull(hisId);
+
+        await User.findByIdAndUpdate(req.user.id, {
+            $pull: {
+                friendship: hisId,
+            }
+        })
 
         return res.status(200).json({
             message: "Friends removed",

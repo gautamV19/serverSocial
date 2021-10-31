@@ -9,5 +9,6 @@ const commentsController = require("../../controllers/comments_controller");
 
 router.post('/', passport.authenticate('jwt', { session: false }), commentsController.create);
 router.delete('/', passport.authenticate('jwt', { session: false }), commentsController.destroy);
+router.get('/', passport.authenticate('jwt', { session: false }), commentsController.list);
 
 module.exports = router;
