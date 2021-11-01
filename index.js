@@ -14,6 +14,21 @@ app.use("/", require('./routes'));
 
 require('./config/mongoConnection');
 
+//** Chat connection **/
+const socket = require("socket.io")
+const cors = require("cors");
+
+app.use(cors());
+app.use(express.json());
+
+const chatport = 4000;
+
+const chatServer = require("http").Server(app);
+const chatSockets = require("./config/chat_sockets.js").chatSockets(chatServer);
+chatServer.listen(chatport);
+console.log("chat server is listening on chatport", chatport);
+
+
 const port = process.env.PORT || 7002;
 
 app.listen(port, () => { console.log('Listening on port', port) });
