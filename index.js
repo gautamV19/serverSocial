@@ -31,4 +31,10 @@ console.log("chat server is listening on chatport", chatport);
 
 const port = process.env.PORT || 7002;
 
+//** deploying on heroku */
+
+if (process.env.NODE_ENV == "production") {
+    app.use(express.static("client/build"));
+}
+
 app.listen(port, () => { console.log('Listening on port', port) });
